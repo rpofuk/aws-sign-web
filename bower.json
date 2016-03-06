@@ -11,5 +11,6 @@
   "dependencies": {
     "cryptojslib": "~3.1.2"
   },
-  "homepage": "https://github.com/danieljoos/aws-sign-web#readme"
+  "homepage": "https://github.com/danieljoos/aws-sign-web#readme",
+  "version": "1.0.0"
 }
