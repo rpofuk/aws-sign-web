@@ -1,0 +1,14 @@
+{
+  "name": "aws-sign-web",
+  "authors": [
+    "Daniel Joos <daniel@joosweb.de>"
+  ],
+  "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cryptojslib": "~3.1.2"
+  }
+}
