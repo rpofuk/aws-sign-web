@@ -66,7 +66,7 @@
         calculateSignature(this, workingSet);       // Step3: calculate the signature hash
         buildSignatureHeader(this, workingSet);     // Step4: build the authorization header
         return {
-            'Accept': workingSet.request.headers['Accept'],
+            'Accept': workingSet.request.headers['accept'],
             'Authorization': workingSet.authorization,
             'x-amz-date': workingSet.request.headers['x-amz-date'],
             'x-amz-security-token': this.config.sessionToken || undefined
