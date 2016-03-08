@@ -16,6 +16,7 @@
         service: 'execute-api',
         defaultContentType: 'application/json',
         defaultAcceptType: 'application/json',
+        payloadSerializerFactory: JsonPayloadSerializer,
         uriParserFactory: SimpleUriParser,
         hasherFactory: CryptoJSHasher
     };
@@ -32,6 +33,8 @@
      */
     var AwsSigner = function (config) {
         this.config = extend({}, defaultConfig, config);
+        this.payloadSerializer = this.config.payloadSerializer ||
+            this.config.payloadSerializerFactory();
         this.uriParser = this.config.uriParserFactory();
         this.hasher = this.config.hasherFactory();
         assertRequired(this.config.accessKeyId, 'Signer requires AWS AccessKeyID');
@@ -68,6 +71,7 @@
         return {
             'Accept': workingSet.request.headers['accept'],
             'Authorization': workingSet.authorization,
+            'Content-Type': workingSet.request.headers['content-type'],
             'x-amz-date': workingSet.request.headers['x-amz-date'],
             'x-amz-security-token': this.config.sessionToken || undefined
         };
@@ -81,18 +85,32 @@
             'accept': self.config.defaultAcceptType,
             'x-amz-date': amzDate(ws.signDate)
         };
-        if (!ws.request.data) {
-            delete headers['content-type'];
+        // Payload or not?
+        ws.request.method = ws.request.method.toUpperCase();
+        if (ws.request.body) {
+            ws.payload = ws.request.body;
+        } else if (ws.request.data && self.payloadSerializer) {
+            ws.payload = self.payloadSerializer(ws.request.data);
         } else {
-            ws.request.data = JSON.stringify(ws.request.data);
+            delete headers['content-type'];
         }
+        // Headers
         ws.request.headers = extend(
             headers,
             Object.keys(ws.request.headers).reduce(function (normalized, key) {
                 normalized[key.toLowerCase()] = ws.request.headers[key];
+                return normalized;
             }, {})
         );
         ws.sortedHeaderKeys = Object.keys(ws.request.headers).sort();
+        // Remove content-type parameters as some browser might change them on send
+        if (ws.request.headers['content-type']) {
+            ws.request.headers['content-type'] = ws.request.headers['content-type'].split(';')[0];
+        }
+        // Merge params to query params
+        if (typeof(ws.request.params) === 'object') {
+            angular.extend(ws.uri.queryParams, ws.request.params);
+        }
     }
 
     // Convert the request to a canonical format.
@@ -115,7 +133,7 @@
                 // Signed Headers:
             ws.signedHeaders + '\n' +
                 // Hashed Payload
-            self.hasher.hash((ws.request.data) ? ws.request.data : '');
+            self.hasher.hash((ws.payload) ? ws.payload : '');
     }
 
     // Construct the string that will be signed.
@@ -167,6 +185,15 @@
             return result.substr(0, 8);
         }
         return result;
+    }
+
+    /**
+     * Payload serializer factory implementation that converts the data to a JSON string.
+     */
+    function JsonPayloadSerializer() {
+        return function(data) {
+            return JSON.stringify(data);
+        }
     }
 
     /**
