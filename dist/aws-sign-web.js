@@ -296,8 +296,9 @@
                 if (typeof(src) === 'undefined') {
                     return;
                 }
-                if (typeof(src) === 'object') {
-                    dest[key] = extend({}, src);
+                if (src !== null && typeof(src) === 'object') {
+                    dest[key] = (Array.isArray(src) ? [] : {});
+                    extend(dest[key], src);
                 } else {
                     dest[key] = src;
                 }
