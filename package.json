@@ -1,7 +1,8 @@
 {
   "name": "aws-sign-web",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
+  "keywords": ["aws", "sign", "web", "plain", "es5"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danieljoos/aws-sign-web.git"
