@@ -48,7 +48,9 @@
      * request = {
      *      headers: { ... },
      *      method: 'GET',
-     *      data: ...
+     *      url: 'http://...',
+     *      params: { ... },
+     *      data: ...           // alternative: body
      * };
      * ```
      * The resulting object contains the signature headers. For example, it can be merged into an
@@ -109,7 +111,7 @@
         }
         // Merge params to query params
         if (typeof(ws.request.params) === 'object') {
-            angular.extend(ws.uri.queryParams, ws.request.params);
+            extend(ws.uri.queryParams, ws.request.params);
         }
     }
 
