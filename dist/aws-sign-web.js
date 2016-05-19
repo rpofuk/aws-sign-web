@@ -6,9 +6,19 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-;(function (globals, factory) {
-    globals.AwsSigner = factory();
-})(this, function () {
+;(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        /* global define */
+        define(['cryptojs/core', 'cryptojs/sha256', 'cryptojs/hmac-sha256'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = factory(require('cryptojs/core'),
+                                 require('cryptojs/sha256'),
+                                 require('cryptojs/hmac-sha256'));
+    } else {
+        /* global CryptoJS */
+        root.AwsSigner = factory(CryptoJS, CryptoJS.SHA256, CryptoJS.HmacSHA256);
+    }
+}(this, function (CryptoJS) {
     'use strict';
 
     var defaultConfig = {
@@ -28,7 +38,7 @@
      * `accessKeyId`: The AWS IAM access key ID.
      * `secretKey`: The AWS IAM secret key.
      * `sessionToken`: Optional session token, required for temporary credentials.
-     * @param config The configuration object.
+     * @param {object} config The configuration object.
      * @constructor
      */
     var AwsSigner = function (config) {
@@ -55,8 +65,8 @@
      * ```
      * The resulting object contains the signature headers. For example, it can be merged into an
      * existing `$http` config when dealing with Angular JS.
-     * @param request The request to create the signature for. Will not be modified!
-     * @param signDate Optional signature date to use. Current date-time is used if not specified.
+     * @param {object} request The request to create the signature for. Will not be modified!
+     * @param {Date=} signDate Optional signature date to use. Current date-time is used if not specified.
      * @returns Signed request headers.
      */
     AwsSigner.prototype.sign = function (request, signDate) {
@@ -195,7 +205,7 @@
     function JsonPayloadSerializer() {
         return function(data) {
             return JSON.stringify(data);
-        }
+        };
     }
 
     /**
@@ -204,11 +214,11 @@
      * Therefore it most likely will only work in a web browser.
      */
     function SimpleUriParser() {
-        var parser = document.createElement('a');
+        var parser = document ? document.createElement('a') : {};
 
         /**
          * Parse the given URI.
-         * @param uri The URI to parse.
+         * @param {string} uri The URI to parse.
          * @returns JavaScript object with the parse results:
          * `protocol`: The URI protocol part.
          * `host`: Host part of the URI.
@@ -241,13 +251,12 @@
      * Requires at least the CryptoJS rollups: `sha256.js` and `hmac-sha256.js`.
      */
     function CryptoJSHasher() {
-        /* global CryptoJS */
         return {
             /**
              * Hash the given input using SHA-256 algorithm.
              * The options can be used to control the in-/output of the hash operation.
-             * @param input Input data.
-             * @param options Options object:
+             * @param {*} input Input data.
+             * @param {object} options Options object:
              * `hexOutput` -- Output the hash with hex encoding (default: `true`).
              * `textInput` -- Interpret the input data as text (default: `true`).
              * @returns The generated hash
@@ -265,9 +274,9 @@
              * Create the HMAC of the given input data with the given key using the SHA-256
              * hash algorithm.
              * The options can be used to control the in-/output of the hash operation.
-             * @param key Secret key.
-             * @param input Input data.
-             * @param options Options object:
+             * @param {string} key Secret key.
+             * @param {*} input Input data.
+             * @param {object} options Options object:
              * `hexOutput` -- Output the hash with hex encoding (default: `true`).
              * `textInput` -- Interpret the input data as text (default: `true`).
              * @returns The generated HMAC.
@@ -282,7 +291,6 @@
             }
         };
     }
-
 
     // Simple version of the `extend` function, known from Angular and Backbone.
     // It merges the second (and all succeeding) argument(s) into the object, given as first
@@ -316,6 +324,5 @@
         }
     }
 
-
     return AwsSigner;
-});
+}));

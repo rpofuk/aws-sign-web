@@ -1,6 +1,6 @@
 {
   "name": "aws-sign-web",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
   "keywords": [
     "aws",
@@ -19,6 +19,7 @@
     "url": "https://github.com/danieljoos/aws-sign-web/issues"
   },
   "homepage": "https://github.com/danieljoos/aws-sign-web#readme",
+  "main": "dist/aws-sign-web.js",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.2.0",
