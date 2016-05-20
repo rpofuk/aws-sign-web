@@ -16,7 +16,7 @@
                                  require('crypto-js/hmac-sha256'));
     } else {
         /* global CryptoJS */
-        root.AwsSigner = factory(CryptoJS, CryptoJS.SHA256, CryptoJS.HmacSHA256);
+        root.awsSignWeb = factory(CryptoJS, CryptoJS.SHA256, CryptoJS.HmacSHA256);
     }
 }(this, function (CryptoJS) {
     'use strict';
@@ -47,8 +47,8 @@
             this.config.payloadSerializerFactory();
         this.uriParser = this.config.uriParserFactory();
         this.hasher = this.config.hasherFactory();
-        assertRequired(this.config.accessKeyId, 'Signer requires AWS AccessKeyID');
-        assertRequired(this.config.secretKey, 'Signer requires AWS SecretKey');
+        assertRequired(this.config.accessKeyId, 'AwsSigner requires AWS AccessKeyID');
+        assertRequired(this.config.secretKey, 'AwsSigner requires AWS SecretKey');
     };
 
     /**
@@ -324,5 +324,7 @@
         }
     }
 
-    return AwsSigner;
+    return {
+        AwsSigner: AwsSigner
+    };
 }));

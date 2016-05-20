@@ -3,17 +3,29 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 
-gulp.task('dist-min', function () {
-    return gulp.src('src/aws-sign-web.js')
+var moduleName = 'aws-sign-web';
+
+// Build the minified version
+gulp.task('uglify', ['jshint', 'jscs'], function () {
+    return gulp.src('./' + moduleName + '.js')
         .pipe(plugins.uglify({preserveComments: 'license'}))
-        .pipe(plugins.rename('aws-sign-web.min.js'))
-        .pipe(gulp.dest('dist'));
+        .pipe(plugins.rename(moduleName + '.min.js'))
+        .pipe(gulp.dest('.'));
 });
 
-gulp.task('dist-normal', function () {
-    return gulp.src('src/aws-sign-web.js')
-        .pipe(gulp.dest('dist'));
+// Run the `jshint` utility
+gulp.task('jshint', function () {
+    return gulp.src('./' + moduleName + '.js')
+        .pipe(plugins.jshint())
+        .pipe(plugins.jshint.reporter());
 });
 
-gulp.task('dist', ['dist-min', 'dist-normal']);
-gulp.task('default', ['dist']);
+// Run the `jscs` utility
+gulp.task('jscs', function () {
+    return gulp.src('./' + moduleName + '.js')
+        .pipe(plugins.jscs())
+        .pipe(plugins.jscs.reporter());
+});
+
+gulp.task('build', ['uglify']);
+gulp.task('default', ['build']);
