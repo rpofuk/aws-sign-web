@@ -109,7 +109,7 @@
         // Headers
         ws.request.headers = extend(
             headers,
-            Object.keys(ws.request.headers).reduce(function (normalized, key) {
+            Object.keys(ws.request.headers || {}).reduce(function (normalized, key) {
                 normalized[key.toLowerCase()] = ws.request.headers[key];
                 return normalized;
             }, {})
