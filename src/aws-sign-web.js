@@ -9,11 +9,11 @@
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         /* global define */
-        define(['cryptojs/core', 'cryptojs/sha256', 'cryptojs/hmac-sha256'], factory);
+        define(['crypto-js/core', 'crypto-js/sha256', 'crypto-js/hmac-sha256'], factory);
     } else if (typeof module === 'object' && module.exports) {
-        module.exports = factory(require('cryptojs/core'),
-                                 require('cryptojs/sha256'),
-                                 require('cryptojs/hmac-sha256'));
+        module.exports = factory(require('crypto-js/core'),
+                                 require('crypto-js/sha256'),
+                                 require('crypto-js/hmac-sha256'));
     } else {
         /* global CryptoJS */
         root.AwsSigner = factory(CryptoJS, CryptoJS.SHA256, CryptoJS.HmacSHA256);
