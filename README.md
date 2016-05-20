@@ -1,4 +1,4 @@
-# aws-sign-web
+# aws-sign-web [![npm version](https://badge.fury.io/js/aws-sign-web.svg)](https://badge.fury.io/js/aws-sign-web) [![Bower version](https://badge.fury.io/bo/aws-sign-web.svg)](https://badge.fury.io/bo/aws-sign-web)
 Plain JavaScript AWS Signature v4 for use within Web Browsers
 
 ## Example: Plain JavaScript
