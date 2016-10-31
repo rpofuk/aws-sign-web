@@ -18,7 +18,7 @@ Plain JavaScript AWS Signature v4 for use within Web Browsers
         service: 'execute-api',
         // AWS IAM credentials, here some temporary credentials with a session token
         accessKeyId: '...',
-        secretKey: '...',
+        secretAccessKey: '...',
         sessionToken: '...'
     };
     var signer = new awsSignWeb.AwsSigner(config);
@@ -74,7 +74,7 @@ angular
             var authConfig = angular.extend({}, defaultAuthConfig, config.awsAuth);
             delete config.awsAuth;
             if (angular.isUndefined(authConfig.accessKeyId) ||
-                angular.isUndefined(authConfig.secretKey)) {
+                angular.isUndefined(authConfig.secretAccessKey)) {
                 return config;
             }
             // Re-use existing request transformers for generating the payload.
@@ -104,7 +104,7 @@ Restangular.all('users')
     .withHttpConfig({
         awsAuth: {
             accessKeyId: '...',
-            secretKey: '...',
+            secretAccessKey: '...',
             sessionToken: '...'
         }
     })

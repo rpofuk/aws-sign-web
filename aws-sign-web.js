@@ -36,7 +36,7 @@
      * Configuration must specify the AWS credentials used for the signing operation.
      * It must contain the following properties:
      * `accessKeyId`: The AWS IAM access key ID.
-     * `secretKey`: The AWS IAM secret key.
+     * `secretAccessKey`: The AWS IAM secret key.
      * `sessionToken`: Optional session token, required for temporary credentials.
      * @param {object} config The configuration object.
      * @constructor
@@ -48,7 +48,7 @@
         this.uriParser = this.config.uriParserFactory();
         this.hasher = this.config.hasherFactory();
         assertRequired(this.config.accessKeyId, 'AwsSigner requires AWS AccessKeyID');
-        assertRequired(this.config.secretKey, 'AwsSigner requires AWS SecretKey');
+        assertRequired(this.config.secretAccessKey, 'AwsSigner requires AWS SecretAccessKey');
     };
 
     /**
@@ -165,7 +165,7 @@
             hmac(
                 hmac(
                     hmac(
-                        'AWS4' + self.config.secretKey,
+                        'AWS4' + self.config.secretAccessKey,
                         amzDate(ws.signDate, true),
                         {hexOutput: false}
                     ),

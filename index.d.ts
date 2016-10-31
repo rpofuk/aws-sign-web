@@ -2,7 +2,7 @@
 declare namespace awsSignWeb {
     interface Config {
         accessKeyId: string;
-        secretKey: string;
+        secretAccessKey: string;
         sessionToken?: string;
         region?: string;
         service?: string;
