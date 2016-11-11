@@ -227,9 +227,10 @@
          */
         return function (uri) {
             parser.href = uri;
+			var hostpart = parser.host.split(':', 2);
             return {
                 protocol: parser.protocol,
-                host: parser.host,
+                host: hostpart[0],
                 path: ((parser.pathname.charAt(0) !== '/') ? '/' : '') + parser.pathname,
                 queryParams: extractQueryParams(parser.search)
             };
