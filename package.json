@@ -1,6 +1,6 @@
 {
   "name": "aws-sign-web",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
   "keywords": [
     "aws",
