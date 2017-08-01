@@ -132,7 +132,9 @@
         }).join(';');
         ws.canonicalRequest = String(ws.request.method).toUpperCase() + '\n' +
                 // Canonical URI:
-            encodeURI(ws.uri.path) + '\n' +
+            ws.uri.path.split('/').map(function(seg) {
+                return encodeURIComponent(seg);
+            }).join('/') + '\n' +
                 // Canonical Query String:
             Object.keys(ws.uri.queryParams).sort().map(function (key) {
                 return encodeURIComponent(key) + '=' +
