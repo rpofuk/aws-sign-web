@@ -133,12 +133,12 @@
         ws.canonicalRequest = String(ws.request.method).toUpperCase() + '\n' +
                 // Canonical URI:
             ws.uri.path.split('/').map(function(seg) {
-                return encodeURIComponent(seg);
+                return uriEncode(seg);
             }).join('/') + '\n' +
                 // Canonical Query String:
             Object.keys(ws.uri.queryParams).sort().map(function (key) {
-                return encodeURIComponent(key) + '=' +
-                    encodeURIComponent(ws.uri.queryParams[key]);
+                return uriEncode(key) + '=' +
+                    uriEncode(ws.uri.queryParams[key]);
             }).join('&') + '\n' +
                 // Canonical Headers:
             ws.sortedHeaderKeys.map(function (key) {
@@ -246,6 +246,17 @@
                 return result;
             }, {});
         }
+    }
+
+    /**
+     * URI encode according to S3 requirements.
+     * See: http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html
+     * See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+     */
+    function uriEncode(input) {
+        return encodeURIComponent(input).replace(/[!'()*]/g, function(c) {
+            return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+        });
     }
 
     /**
