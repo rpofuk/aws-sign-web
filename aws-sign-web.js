@@ -1,7 +1,7 @@
 //
 // AWS Signature v4 Implementation for Web Browsers
 //
-// Copyright (c) 2016 Daniel Joos
+// Copyright (c) 2016-2017 Daniel Joos
 //
 // Distributed under MIT license. (See file LICENSE)
 //
@@ -97,6 +97,13 @@
             'accept': self.config.defaultAcceptType,
             'x-amz-date': amzDate(ws.signDate)
         };
+        // Remove accept/content-type headers if no default was configured.
+        if (!self.config.defaultAcceptType) {
+            delete headers['accept'];
+        }
+        if (!self.config.defaultContentType) {
+            delete headers['content-type'];
+        }
         // Payload or not?
         ws.request.method = ws.request.method.toUpperCase();
         if (ws.request.body) {
@@ -232,7 +239,8 @@
             return {
                 protocol: parser.protocol,
                 host: parser.host.replace(/^(.*):((80)|(443))$/, '$1'),
-                path: ((parser.pathname.charAt(0) !== '/') ? '/' : '') + parser.pathname,
+                path: ((parser.pathname.charAt(0) !== '/') ? '/' : '') +
+                    decodeURIComponent(parser.pathname),
                 queryParams: extractQueryParams(parser.search)
             };
         };
@@ -241,7 +249,7 @@
             return /^\??(.*)$/.exec(search)[1].split('&').reduce(function (result, arg) {
                 arg = /^(.+)=(.*)$/.exec(arg);
                 if (arg) {
-                    result[arg[1]] = arg[2];
+                    result[decodeURIComponent(arg[1])] = decodeURIComponent(arg[2]);
                 }
                 return result;
             }, {});
