@@ -1,7 +1,7 @@
 # aws-sign-web [![npm version](https://badge.fury.io/js/aws-sign-web.svg)](https://badge.fury.io/js/aws-sign-web) [![Bower version](https://badge.fury.io/bo/aws-sign-web.svg)](https://badge.fury.io/bo/aws-sign-web) [![Build Status](https://travis-ci.org/danieljoos/aws-sign-web.svg?branch=master)](https://travis-ci.org/danieljoos/aws-sign-web)
 Plain JavaScript AWS Signature v4 for use within Web Browsers
 
-## Example: Plain JavaScript
+## Example
 
 ```html
 <script src="bower_components/cryptojslib/rollups/sha256.js"></script>
