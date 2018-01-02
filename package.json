@@ -21,6 +21,7 @@
   "homepage": "https://github.com/danieljoos/aws-sign-web#readme",
   "main": "aws-sign-web.js",
   "scripts": {
+    "prepublishOnly": "node_modules/.bin/gulp",
     "test": "node_modules/.bin/mocha"
   },
   "devDependencies": {
