@@ -32,6 +32,7 @@
     "gulp-uglify": "^1.5.3",
     "http-string-parser": "0.0.6",
     "jsdom": "^11.3.0",
+    "jshint": "^2.9.5",
     "mocha": "^4.0.1"
   },
   "dependencies": {
