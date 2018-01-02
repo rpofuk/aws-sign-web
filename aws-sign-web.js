@@ -1,10 +1,10 @@
-//
-// AWS Signature v4 Implementation for Web Browsers
-//
-// Copyright (c) 2016-2017 Daniel Joos
-//
-// Distributed under MIT license. (See file LICENSE)
-//
+/**
+ * AWS Signature v4 Implementation for Web Browsers
+ *
+ * Copyright (c) 2016-2018 Daniel Joos
+ *
+ * Distributed under MIT license. (See file LICENSE)
+ */
 
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {

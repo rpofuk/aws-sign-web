@@ -8,7 +8,7 @@ var moduleName = 'aws-sign-web';
 // Build the minified version
 gulp.task('uglify', ['jshint', 'jscs'], function () {
     return gulp.src('./' + moduleName + '.js')
-        .pipe(plugins.uglify({preserveComments: 'license'}))
+        .pipe(plugins.uglify({output: {comments: /Copyright/}}))
         .pipe(plugins.rename(moduleName + '.min.js'))
         .pipe(gulp.dest('.'));
 });
