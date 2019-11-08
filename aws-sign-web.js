@@ -143,10 +143,11 @@
                 return uriEncode(seg);
             }).join('/') + '\n' +
                 // Canonical Query String:
-            Object.keys(ws.uri.queryParams).sort().map(function (key) {
-                return uriEncode(key) + '=' +
-                    uriEncode(ws.uri.queryParams[key]);
-            }).join('&') + '\n' +
+            flatten(Object.keys(ws.uri.queryParams).sort().map(function (key) {
+                return ws.uri.queryParams[key].sort().map(function(val) {
+                    return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+                })
+            })).join('&') + '\n' +
                 // Canonical Headers:
             ws.sortedHeaderKeys.map(function (key) {
                 return key.toLocaleLowerCase() + ':' + ws.request.headers[key];
@@ -249,7 +250,12 @@
             return /^\??(.*)$/.exec(search)[1].split('&').reduce(function (result, arg) {
                 arg = /^(.+)=(.*)$/.exec(arg);
                 if (arg) {
-                    result[decodeURI(arg[1])] = decodeURI(arg[2]);
+                    var paramKey = decodeURI(arg[1]);
+                    result[paramKey] = (
+                        (typeof result[paramKey] != 'undefined' && result[paramKey] instanceof Array)
+                            ? result[paramKey]
+                            : []
+                    ).concat(decodeURI(arg[2]));
                 }
                 return result;
             }, {});
@@ -336,6 +342,13 @@
             });
         });
         return dest;
+    }
+
+    // Short function that uses some JavaScript array methods to flatten an n-dimensional array.
+    function flatten(arr) {
+        return arr.reduce(function (flat, toFlatten) {
+            return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+        }, []);
     }
 
     // Throw an error if the given object is undefined.
