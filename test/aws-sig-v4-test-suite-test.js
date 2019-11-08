@@ -51,6 +51,11 @@ describe('AwsSigner', function() {
             const signed = awsSigner.sign(testReq.request, signDate);
             assert.equal(signed.Authorization, testReq.expectedAuthorization);
         });
+        it('should handle GET request with query parameters and respect multiple value order', function() {
+            const testReq = getTestRequest('get-vanilla-query-order-value');
+            const signed = awsSigner.sign(testReq.request, signDate);
+            assert.equal(signed.Authorization, testReq.expectedAuthorization);
+        });
         it('should handle GET request with unreserved characters in query parameter', function() {
             const testReq = getTestRequest('get-vanilla-query-unreserved');
             const signed = awsSigner.sign(testReq.request, signDate);
