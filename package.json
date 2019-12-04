@@ -25,16 +25,13 @@
     "test": "node_modules/.bin/mocha"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-jscs": "^4.1.0",
-    "gulp-jshint": "^2.0.4",
-    "gulp-load-plugins": "^1.2.0",
+    "gulp": "^4.0.2",
+    "gulp-load-plugins": "^2.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "http-string-parser": "0.0.6",
-    "jsdom": "^11.3.0",
-    "jshint": "^2.9.5",
-    "mocha": "^4.0.1"
+    "jsdom": "^15.2.1",
+    "mocha": "^6.2.2"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1"
