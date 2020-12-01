@@ -140,12 +140,13 @@
         ws.canonicalRequest = String(ws.request.method).toUpperCase() + '\n' +
                 // Canonical URI:
             ws.uri.path.split('/').map(function(seg) {
-                return uriEncode(seg);
+                return encodePathSegment(self, ws, seg);
             }).join('/') + '\n' +
                 // Canonical Query String:
             flatten(Object.keys(ws.uri.queryParams).sort().map(function (key) {
                 return ws.uri.queryParams[key].sort().map(function(val) {
-                    return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+                    // QueryParam values with '=' characters must be double-encoded.
+                    return encodeURIComponent(key) + '=' + uriEncode(val)
                 })
             })).join('&') + '\n' +
                 // Canonical Headers:
@@ -248,7 +249,7 @@
 
         function extractQueryParams(search) {
             return /^\??(.*)$/.exec(search)[1].split('&').reduce(function (result, arg) {
-                arg = /^(.+)=(.*)$/.exec(arg);
+                arg = /^(.+?)=(.*)$/.exec(arg);
                 if (arg) {
                     var paramKey = decodeURI(arg[1]);
                     result[paramKey] = (
@@ -271,6 +272,44 @@
         return encodeURIComponent(input).replace(/[!'()*]/g, function(c) {
             return '%' + c.charCodeAt(0).toString(16).toUpperCase();
         });
+    }
+
+    /**
+     * Encode query parameter values according to SigV4 requirements.
+     *
+     * SigV4 canonical requests for query parameter values must be encoded.
+     * If the value contains an "=" character, that character must be double encoded (i.e. "%3D" => "%253D")
+     *
+     * See: https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
+     * See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+     * @return [String]
+     */
+    function encodeQueryParamValue(input) {
+        var encoded = "";
+        for (var i = 0; i < input.length; i++) {
+            if (input[i] === "=") {
+                // Double-encode "equals" character for SigV4 canonical query strings.
+                encoded += encodeURIComponent(encodeURIComponent(input[i]));
+            } else {
+                encoded += encodeURIComponent(input[i]);
+            }
+        }
+        return encoded;
+    }
+
+    /**
+     * URI encode path segments values according to SigV4 requirements.
+     *
+     * SigV4 canonical requests for path segments values must be encoded.
+     * If the request is for a non-S3 service, then the segment must be double encoded. (i.e. " path%20with%20spaces" => "path%2520with%2520spaces")
+     *
+     * See: https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
+     * See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+     * @return [String]
+     */
+    function encodePathSegment(self, ws, pathSegment) {
+        // For non-s3 services, each path segment must be double-encoded.
+        return self.config.service !== "s3" ? uriEncode(uriEncode(pathSegment)) : uriEncode(pathSegment);
     }
 
     /**

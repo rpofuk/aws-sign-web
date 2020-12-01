@@ -1,6 +1,6 @@
 {
-  "name": "aws-sign-web",
-  "version": "1.5.0",
+  "name": "@rpofuk/aws-sign-web",
+  "version": "1.5.26",
   "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
   "keywords": [
     "aws",
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danieljoos/aws-sign-web.git"
+    "url": "git+https://github.com/rpofuk/aws-sign-web.git"
   },
   "author": "Daniel Joos <daniel@joosweb.de>",
   "license": "MIT",
